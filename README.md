@@ -64,9 +64,9 @@ github-toolkit/
    - Download ChromeDriver from [here](https://chromedriver.chromium.org/downloads) matching your Chrome version.
    - Add ChromeDriver to your system PATH or place it in a directory accessible to the script.
 
-5. **Create Input Directory**
+5. **Create config/ Directory**
    ```bash
-   mkdir input
+   mkdir config
    ```
    This directory will store cookie files (e.g., `<username>_cookies.json`) if authentication uses cookies.
 
