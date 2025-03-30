@@ -11,7 +11,9 @@ class GitHubRepoController:
         self.logger = logging.getLogger(__name__)
         self.auth_service = AuthService()
         self.db_connection = DatabaseConnection()
-        self.repo_scraper = GithubRepoScraper(self.auth_service.get_driver(), self.db_connection)
+        self.repo_scraper = GithubRepoScraper(
+            self.auth_service.get_driver(), self.db_connection
+        )
         self.driver = self.auth_service.get_driver()
         self.session = self.db_connection.get_session()
 

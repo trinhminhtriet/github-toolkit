@@ -8,6 +8,7 @@ import logging
 from config.settings import Settings
 from core.exceptions import AuthException
 
+
 class AuthService:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
@@ -32,7 +33,9 @@ class AuthService:
         with open(Settings.COOKIE_FILEPATH, "r") as file:
             cookies = json.load(file)
             for cookie in cookies:
-                self.driver.add_cookie({"name": cookie["name"], "value": cookie["value"]})
+                self.driver.add_cookie(
+                    {"name": cookie["name"], "value": cookie["value"]}
+                )
         time.sleep(5)
 
     def _login_with_credentials(self) -> None:

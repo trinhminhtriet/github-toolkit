@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Settings:
     GITHUB_USERNAME = os.getenv("GITHUB_USERNAME")
     GITHUB_PASSWORD = os.getenv("GITHUB_PASSWORD")
@@ -14,6 +15,21 @@ class Settings:
     USE_COOKIE = True
     DATABASE_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
     LANGUAGES = [
-        "python", "javascript", "typescript", "java", "ruby", "php", "go",
-        "swift", "kotlin", "rust", "c", "c++", "c#", "shell", "bash", "r", "dart"
+        "python",
+        "javascript",
+        "typescript",
+        "java",
+        "ruby",
+        "php",
+        "go",
+        "swift",
+        "kotlin",
+        "rust",
+        "c",
+        "c++",
+        "c#",
+        "shell",
+        "bash",
+        "r",
+        "dart",
     ]

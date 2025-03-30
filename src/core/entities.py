@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class GithubUser:
     def __init__(self, username: str, profile_url: str):
         self.username = username
@@ -7,6 +8,7 @@ class GithubUser:
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         self.published_at = datetime.now()
+
 
 class GithubRepo:
     def __init__(self, username: str, repo_url: str, repo_name: str):

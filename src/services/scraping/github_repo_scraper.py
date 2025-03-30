@@ -8,6 +8,7 @@ from core.entities import GithubRepo
 from core.exceptions import ScraperException
 from utils.helpers import convert_to_int
 
+
 class GithubRepoScraper:
     def __init__(self, driver, db_connection):
         self.driver = driver
@@ -21,12 +22,20 @@ class GithubRepoScraper:
     def upsert_github_repo(self, repo: dict) -> None:
         with self.db_connection.get_session() as session:
             try:
-                existing_repo = session.query(GithubRepoModel).filter_by(repo_url=repo["repo_url"]).first()
+                existing_repo = (
+                    session.query(GithubRepoModel)
+                    .filter_by(repo_url=repo["repo_url"])
+                    .first()
+                )
                 if existing_repo:
                     for key, value in repo.items():
-                        setattr(existing_repo, key, value or getattr(existing_repo, key))
+                        setattr(
+                            existing_repo, key, value or getattr(existing_repo, key)
+                        )
                 else:
-                    new_repo = GithubRepoModel(**{k: v for k, v in repo.items() if v is not None})
+                    new_repo = GithubRepoModel(
+                        **{k: v for k, v in repo.items() if v is not None}
+                    )
                     session.add(new_repo)
                 session.commit()
                 self.logger.info(f"Upserted repository: {repo.get('repo_url')}")
@@ -45,7 +54,9 @@ class GithubRepoScraper:
 
             for li in li_tags:
                 repo = self._extract_repo_data(li, username)
-                repos.append(GithubRepo(repo["username"], repo["repo_url"], repo["repo_name"]))
+                repos.append(
+                    GithubRepo(repo["username"], repo["repo_url"], repo["repo_name"])
+                )
                 self.upsert_github_repo(repo)
                 self.logger.info(json.dumps(repo, ensure_ascii=False, indent=2))
         except Exception as e:
@@ -55,23 +66,35 @@ class GithubRepoScraper:
     def _extract_repo_data(self, li, username: str) -> dict:
         repo = {
             "username": username,
-            "repo_name": li.find_element(By.CSS_SELECTOR, 'a[itemprop="name codeRepository"]').text,
-            "repo_url": li.find_element(By.CSS_SELECTOR, 'a[itemprop="name codeRepository"]').get_attribute("href"),
+            "repo_name": li.find_element(
+                By.CSS_SELECTOR, 'a[itemprop="name codeRepository"]'
+            ).text,
+            "repo_url": li.find_element(
+                By.CSS_SELECTOR, 'a[itemprop="name codeRepository"]'
+            ).get_attribute("href"),
         }
         try:
-            repo["repo_intro"] = li.find_element(By.CSS_SELECTOR, 'p[itemprop="description"]').text.strip()
+            repo["repo_intro"] = li.find_element(
+                By.CSS_SELECTOR, 'p[itemprop="description"]'
+            ).text.strip()
         except:
             repo["repo_intro"] = None
         try:
-            repo["repo_lang"] = li.find_element(By.CSS_SELECTOR, 'span[itemprop="programmingLanguage"]').text.strip()
+            repo["repo_lang"] = li.find_element(
+                By.CSS_SELECTOR, 'span[itemprop="programmingLanguage"]'
+            ).text.strip()
         except:
             repo["repo_lang"] = None
         try:
-            repo["repo_stars"] = convert_to_int(li.find_element(By.CSS_SELECTOR, 'a[href*="/stargazers"]').text.strip())
+            repo["repo_stars"] = convert_to_int(
+                li.find_element(By.CSS_SELECTOR, 'a[href*="/stargazers"]').text.strip()
+            )
         except:
             repo["repo_stars"] = None
         try:
-            repo["repo_forks"] = convert_to_int(li.find_element(By.CSS_SELECTOR, 'a[href*="/forks"]').text.strip())
+            repo["repo_forks"] = convert_to_int(
+                li.find_element(By.CSS_SELECTOR, 'a[href*="/forks"]').text.strip()
+            )
         except:
             repo["repo_forks"] = None
         return repo

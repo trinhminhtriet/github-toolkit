@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
+
 class GithubUserModel(Base):
     __tablename__ = "github_users"
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -12,6 +13,7 @@ class GithubUserModel(Base):
     updated_at = Column(DateTime, default=func.now())
     published_at = Column(DateTime, default=func.now())
     followed_at = Column(DateTime, default=func.now())
+
 
 class GithubRepoModel(Base):
     __tablename__ = "github_repos"

@@ -15,7 +15,7 @@ A Python-based web scraper that collects GitHub developer information, their fol
 ## Project Structure
 
 ```
-github_scraper/
+github-toolkit/
 ├── config/
 │   └── settings.py           # Configuration and environment variables
 ├── core/
