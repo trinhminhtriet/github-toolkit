@@ -1,0 +1,3 @@
+selenium
+sqlalchemy
+python-dotenv

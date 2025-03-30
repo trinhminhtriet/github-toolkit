@@ -1,8 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.config.settings import Settings
-from src.database.models import Base
-
+from config.settings import Settings
+from infrastructure.database.models import Base
 
 class DatabaseConnection:
     def __init__(self):

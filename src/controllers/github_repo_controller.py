@@ -1,24 +1,23 @@
-import logging
 import time
-from src.config.settings import Settings
-from src.database.db_connection import DatabaseConnection
-from src.database.models import GithubUser
-from src.services.auth_service import AuthService
-from src.services.github_repo_scraper import GithubRepoScraper
+import logging
+from infrastructure.auth.auth_service import AuthService
+from infrastructure.database.connection import DatabaseConnection
+from services.scraping.github_repo_scraper import GithubRepoScraper
+from infrastructure.database.models import GithubUserModel
 
 
 class GitHubRepoController:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.auth_service = AuthService()
+        self.db_connection = DatabaseConnection()
+        self.repo_scraper = GithubRepoScraper(self.auth_service.get_driver(), self.db_connection)
+        self.driver = self.auth_service.get_driver()
+        self.session = self.db_connection.get_session()
+
     def collect(self):
-        db = DatabaseConnection()
-        session = db.get_session()
-
-        auth = AuthService()
-        auth.authenticate()
-
-        scraper = GithubRepoScraper(auth.get_driver(), session)
-
         limit = 100
-        db_page = 1
+        db_page = 2
 
         try:
             while True:
@@ -29,9 +28,9 @@ class GitHubRepoController:
                 )
 
                 github_users = (
-                    session.query(GithubUser)
-                    .filter(GithubUser.followed_at.is_not(None))
-                    .order_by(GithubUser.followed_at.desc())
+                    self.session.query(GithubUserModel)
+                    .filter(GithubUserModel.followed_at.is_not(None))
+                    .order_by(GithubUserModel.followed_at.desc())
                     .limit(limit)
                     .offset(offset)
                     .all()
@@ -45,8 +44,8 @@ class GitHubRepoController:
                     logging.info(
                         f"[{user.username}] Collect repositories from user: {user.profile_url}"
                     )
-                    scraper.scrape_repos_from_page(user.username)
+                    self.repo_scraper.scrape_repos(user.username)
                     time.sleep(2)
         finally:
-            auth.close()
-            session.close()
+            self.auth_service.close()
+            self.session.close()
