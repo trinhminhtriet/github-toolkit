@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.options import Options
 import logging
 from src.config.settings import Settings
 
+
 class AuthService:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
@@ -17,7 +18,7 @@ class AuthService:
 
     def authenticate(self):
         self.driver.get("https://github.com/login")
-        
+
         if Settings.USE_COOKIE:
             self._load_cookies()
         else:
@@ -29,14 +30,16 @@ class AuthService:
         with open(Settings.COOKIE_FILEPATH, "r") as file:
             cookies = json.load(file)
             for cookie in cookies:
-                self.driver.add_cookie({"name": cookie["name"], "value": cookie["value"]})
+                self.driver.add_cookie(
+                    {"name": cookie["name"], "value": cookie["value"]}
+                )
         time.sleep(5)
 
     def _login_with_credentials(self):
         self.logger.info("Using username and password for authentication...")
         username_input = self.driver.find_element(By.NAME, "login")
         password_input = self.driver.find_element(By.NAME, "password")
-        
+
         username_input.send_keys(Settings.GITHUB_USERNAME)
         password_input.send_keys(Settings.GITHUB_PASSWORD)
         password_input.send_keys(Keys.RETURN)
