@@ -3,6 +3,8 @@ def convert_to_int(value):
 
 
 def intval_star(value):
+    if type(value) is int:
+        return value
     if "," in str(value):
         value = str(value).replace(",", "")
     if "k" in value:
