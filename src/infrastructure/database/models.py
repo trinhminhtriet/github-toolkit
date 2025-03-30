@@ -9,10 +9,11 @@ class GithubUserModel(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(255, collation="utf8mb4_unicode_ci"), unique=True)
     profile_url = Column(String(255, collation="utf8mb4_unicode_ci"))
+    repositories_count = Column(Integer, default=0)
+    followed_at = Column(DateTime, default=func.now())
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now())
     published_at = Column(DateTime, default=func.now())
-    followed_at = Column(DateTime, default=func.now())
 
 
 class GithubRepoModel(Base):

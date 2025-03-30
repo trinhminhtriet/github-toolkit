@@ -11,9 +11,9 @@ class GitHubRepoController:
         self.logger = logging.getLogger(__name__)
         self.auth_service = AuthService()
         self.auth_service.authenticate()
-        
+
         self.db_connection = DatabaseConnection()
-        
+
         self.repo_scraper = GithubRepoScraper(
             self.auth_service.get_driver(), self.db_connection
         )
@@ -35,7 +35,7 @@ class GitHubRepoController:
                 github_users = (
                     self.session.query(GithubUserModel)
                     .filter(GithubUserModel.followed_at.is_not(None))
-                    .order_by(GithubUserModel.followed_at.desc())
+                    .order_by(GithubUserModel.repositories_count.desc())
                     .limit(limit)
                     .offset(offset)
                     .all()

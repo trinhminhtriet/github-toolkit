@@ -6,7 +6,7 @@ import logging
 from infrastructure.database.models import GithubRepoModel
 from core.entities import GithubRepo
 from core.exceptions import ScraperException
-from utils.helpers import convert_to_int
+from utils.helpers import convert_to_int, intval_star
 
 
 class GithubRepoScraper:
@@ -54,6 +54,7 @@ class GithubRepoScraper:
 
             for li in li_tags:
                 repo = self._extract_repo_data(li, username)
+                self._star_repo(li, repo=repo)
                 repos.append(
                     GithubRepo(repo["username"], repo["repo_url"], repo["repo_name"])
                 )
@@ -98,3 +99,36 @@ class GithubRepoScraper:
         except:
             repo["repo_forks"] = None
         return repo
+
+    def _star_repo(self, li, repo):
+        try:
+            starring_container = li.find_element(
+                By.CSS_SELECTOR, "div.starring-container"
+            )
+            if " on " in starring_container.get_attribute("class"):
+                repo_starred = True
+                div_tag = starring_container.find_element(
+                    By.CSS_SELECTOR, "div.starred"
+                )
+            else:
+                repo_starred = False
+                div_tag = starring_container.find_element(
+                    By.CSS_SELECTOR, "div.unstarred"
+                )
+
+            if (not repo_starred) and (
+                repo["repo_stars"] and intval_star(repo["repo_stars"]) > 128
+            ):
+                star_button = div_tag.find_element(
+                    By.CSS_SELECTOR, 'button[type="submit"]'
+                )
+                logging.info(
+                    f"{repo['repo_url']} - {star_button.get_attribute('aria-label')}"
+                )
+                star_button.click()
+                logging.info(f"Starred repository: {repo['repo_url']}")
+                time.sleep(1)
+            else:
+                logging.info(f"Skip starring repository: {repo['repo_url']}")
+        except Exception as e:
+            logging.error(f"Error while starring repository: {e}")

@@ -5,9 +5,10 @@ class GithubUser:
     def __init__(self, username: str, profile_url: str):
         self.username = username
         self.profile_url = profile_url
+        self.repositories_count = 0
+        self.published_at = datetime.now()
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
-        self.published_at = datetime.now()
 
 
 class GithubRepo:
