@@ -27,4 +27,4 @@ def collect_repo():
 
 
 if __name__ == "__main__":
-    gitstar_collect_repo()
+    collect_repo()

@@ -10,7 +10,10 @@ class GitHubRepoController:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.auth_service = AuthService()
+        self.auth_service.authenticate()
+        
         self.db_connection = DatabaseConnection()
+        
         self.repo_scraper = GithubRepoScraper(
             self.auth_service.get_driver(), self.db_connection
         )
