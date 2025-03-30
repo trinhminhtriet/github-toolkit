@@ -1,122 +1,143 @@
-# GitHub Toolkit
+# GitHub Scraper
 
-A Python-based tool to scrape GitHub repositories and user data using Selenium, store the information in a MySQL database, and optionally star repositories based on predefined criteria.
+A Python-based web scraper that collects GitHub developer information, their followers, and repository details using Selenium and stores the data in a MySQL database.
 
-## Overview
+## Features
 
-This project is designed to:
-- Authenticate with GitHub using cookies or username/password.
-- Scrape repository details (name, URL, description, language, stars, forks) from specified GitHub users.
-- Store scraped data in a MySQL database using SQLAlchemy.
-- Automatically star repositories with more than 128 stars if not already starred.
+- Scrapes trending developers across multiple programming languages
+- Collects follower information (up to 1000 per developer)
+- Gathers repository details including name, URL, description, language, stars, and forks
+- Supports authentication via cookies or username/password
+- Stores data in a MySQL database with automatic schema creation
+- Includes error handling and logging
+- Follows clean architecture principles
 
-The codebase follows clean architecture principles, object-oriented programming (OOP), and a modular folder structure for maintainability and scalability.
-
-## Folder Structure
+## Project Structure
 
 ```
-github-toolkit/
-├── src/
-│   ├── config/           # Configuration settings
-│   ├── database/         # Database models and connection logic
-│   ├── services/         # Business logic for authentication and scraping
-│   ├── utils/            # Helper functions
-│   └── main.py           # Entry point of the application
-├── config/               # Directory for cookie files
-├── .env                  # Environment variables (not tracked in git)
-├── README.md             # Project documentation
-└── requirements.txt      # Python dependencies
+github_scraper/
+├── config/
+│   └── settings.py           # Configuration and environment variables
+├── core/
+│   ├── entities.py          # Domain entities
+│   └── exceptions.py        # Custom exceptions
+├── infrastructure/
+│   ├── database/           # Database-related code
+│   │   ├── connection.py
+│   │   └── models.py
+│   └── auth/              # Authentication service
+│       └── auth_service.py
+├── services/
+│   └── scraping/          # Scraping services
+│       ├── github_developer_scraper.py
+│       └── github_repo_scraper.py
+├── utils/
+│   └── helpers.py         # Utility functions
+├── controllers/
+│   └── github_scraper_controller.py  # Main controller
+├── main.py                # Entry point
+└── README.md
 ```
 
 ## Prerequisites
 
 - Python 3.8+
-- MySQL server
-- Chrome browser (for Selenium WebDriver)
-- ChromeDriver (compatible with your Chrome version)
+- MySQL database
+- Chrome browser
+- Chrome WebDriver
 
-## Setup
+## Installation
 
-1. **Clone the Repository**
-   ```bash
-   git clone git@github.com:trinhminhtriet/github-toolkit.git
-   cd github-toolkit
-   ```
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/github-scraper.git
+cd github-scraper
+```
 
-2. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+2. Create a virtual environment and activate it:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-3. **Set Up Environment Variables**
-   Create a `.env` file in the root directory with the following content:
-   ```
-   GITHUB_USERNAME=your_github_username
-   GITHUB_PASSWORD=your_github_password
-   DB_USERNAME=your_mysql_username
-   DB_PASSWORD=your_mysql_password
-   DB_HOST=your_mysql_host
-   DB_NAME=your_database_name
-   ```
-   - Ensure the MySQL database (`DB_NAME`) exists before running the script.
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-4. **Install ChromeDriver**
-   - Download ChromeDriver from [here](https://chromedriver.chromium.org/downloads) matching your Chrome version.
-   - Add ChromeDriver to your system PATH or place it in a directory accessible to the script.
+4. Create a `.env` file in the root directory with the following variables:
+```
+GITHUB_USERNAME=your_username
+GITHUB_PASSWORD=your_password
+DB_USERNAME=your_db_username
+DB_PASSWORD=your_db_password
+DB_HOST=your_db_host
+DB_NAME=your_db_name
+```
 
-5. **Create config/ Directory**
-   ```bash
-   mkdir config
-   ```
-   This directory will store cookie files (e.g., `<username>_cookies.json`) if authentication uses cookies.
+5. Create a `config` directory:
+```bash
+mkdir config
+```
+
+## Requirements
+
+Create a `requirements.txt` file with:
+```
+selenium
+sqlalchemy
+python-dotenv
+```
 
 ## Usage
 
-Run the main script:
+Run the scraper:
 ```bash
-python src/main.py
+python main.py
 ```
 
-### What It Does
-- Authenticates with GitHub using either cookies (if available) or username/password.
-- Queries the database for GitHub users with a `followed_at` timestamp.
-- Scrapes repositories for each user, storing data in the `github_repos` table.
-- Stars repositories with >128 stars if not already starred.
-- Logs progress and errors to the console.
+The scraper will:
+1. Authenticate with GitHub
+2. Scrape trending developers for specified languages
+3. Collect their followers (up to 1000 per developer)
+4. Scrape their repositories
+5. Store all data in the MySQL database
 
-### Configuration
-- Edit `src/config/settings.py` to modify constants like `USE_COOKIE` (default: `True`) or `COOKIE_FILEPATH`.
+## Configuration
+
+- Modify `config/settings.py` to change:
+  - `LANGUAGES`: List of programming languages to scrape
+  - `USE_COOKIE`: Toggle between cookie-based and credential-based authentication
+- Adjust sleep times in services if needed for rate limiting
 
 ## Database Schema
 
-The project uses two tables:
-1. **`github_users`**
-   - Stores GitHub user profile data (username, profile URL, email, etc.).
-2. **`github_repos`**
-   - Stores repository data (name, URL, description, stars, forks, etc.).
+### github_users
+- id (PK)
+- username (unique)
+- profile_url
+- created_at
+- updated_at
+- published_at
 
-Both tables are created automatically by SQLAlchemy if they don’t exist.
+### github_repos
+- id (PK)
+- username
+- repo_name
+- repo_intro
+- repo_url (unique)
+- repo_lang
+- repo_stars
+- repo_forks
+- created_at
+- updated_at
+- published_at
 
-## Logging
+## Error Handling
 
-The application logs to the console with the format:
-```
-%(asctime)s - %(levelname)s - %(message)s
-```
-Log levels include `INFO` (default) and `ERROR`.
-
-## Features
-
-- **Authentication**: Supports cookie-based or credential-based login.
-- **Scraping**: Extracts detailed repository information using Selenium.
-- **Database**: Upserts data to avoid duplicates and tracks updates.
-- **Starring**: Automatically stars repositories meeting the criteria (>128 stars).
-
-## Troubleshooting
-
-- **Authentication Fails**: Ensure GitHub credentials are correct in `.env` or cookies are valid.
-- **Database Errors**: Verify MySQL connection details and database accessibility.
-- **Selenium Issues**: Check ChromeDriver version compatibility with your Chrome browser.
+- Custom exceptions for authentication, scraping, and database operations
+- Logging configured at INFO level
+- Graceful shutdown of browser instance
 
 ## Contributing
 
