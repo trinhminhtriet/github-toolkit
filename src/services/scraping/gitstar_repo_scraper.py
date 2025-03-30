@@ -1,3 +1,4 @@
+import json
 import logging
 import time
 import requests
@@ -75,6 +76,14 @@ class GitstarRepoScraper:
                     stars = stars_span.get_text(strip=True).replace("★", "").strip()
                     repo_data["repo_stars"] = stars
 
+                description_el = entry.find("div", class_="repo-description")
+                if description_el:
+                    repo_data["repo_intro"] = description_el["title"]
+
+                language_el = entry.find("div", class_="repo-language")
+                if language_el:
+                    repo_data["repo_lang"] = language_el.span.text.strip()
+
                 if repo_data.get("repo_url"):
                     repos.append(
                         GithubRepo(
@@ -85,7 +94,7 @@ class GitstarRepoScraper:
                     )
                     self.upsert_github_repo(repo_data)
                     self.logger.info(
-                        f"Added {repo_data['repo_url']} with {repo_data['repo_stars']} stars"
+                        json.dumps(repo_data, indent=2, ensure_ascii=False)
                     )
 
             return repos
