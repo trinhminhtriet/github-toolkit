@@ -22,7 +22,7 @@ class GitHubRepoController:
 
     def collect(self):
         limit = 100
-        db_page = 2
+        db_page = 0
 
         try:
             while True:
