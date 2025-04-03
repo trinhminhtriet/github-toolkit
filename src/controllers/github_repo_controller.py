@@ -2,7 +2,7 @@ import time
 import logging
 from infrastructure.auth.auth_service import AuthService
 from infrastructure.database.connection import DatabaseConnection
-from services.scraping.github_repo_scraper import GithubRepoScraper
+from services.github.github_repo_scraper import GithubRepoScraper
 from infrastructure.database.models import GithubUserModel
 
 

@@ -3,8 +3,8 @@ import logging
 from config.settings import Settings
 from infrastructure.auth.auth_service import AuthService
 from infrastructure.database.connection import DatabaseConnection
-from services.scraping.github_developer_scraper import GithubDeveloperScraper
-from services.scraping.github_repo_scraper import GithubRepoScraper
+from services.github.github_developer_scraper import GithubDeveloperScraper
+from services.github.github_repo_scraper import GithubRepoScraper
 
 
 class GithubScraperController:
