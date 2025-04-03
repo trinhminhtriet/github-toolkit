@@ -19,12 +19,19 @@ def gitstar_collect_repo():
     ctl.collect_repo()
 
 
-def collect_repo():
+def github_collect_repo():
     from controllers.github_repo_controller import GitHubRepoController
 
     ctl = GitHubRepoController()
     ctl.collect()
 
 
+def hellogithub_collect_repo():
+    from controllers.hellogithub_ctl import HelloGitHubController
+
+    ctl = HelloGitHubController()
+    ctl.collect_repo(max_pages=1000)
+
+
 if __name__ == "__main__":
-    collect_repo()
+    hellogithub_collect_repo()
