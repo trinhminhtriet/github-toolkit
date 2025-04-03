@@ -9,7 +9,7 @@ class GitstarController:
         self.session = self.db_connection.get_session()
 
     def collect_user(self):
-        from services.scraping.gitstar_user_scraper import GitstarUserScraper
+        from services.gitstar.gitstar_user_scraper import GitstarUserScraper
 
         try:
             scraper = GitstarUserScraper(self.db_connection)
@@ -21,7 +21,7 @@ class GitstarController:
             self.session.close()
 
     def collect_repo(self):
-        from services.scraping.gitstar_repo_scraper import GitstarRepoScraper
+        from services.gitstar.gitstar_repo_scraper import GitstarRepoScraper
 
         try:
             scraper = GitstarRepoScraper(self.db_connection)
