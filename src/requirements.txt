@@ -1,0 +1,5 @@
+selenium
+pymysql
+sqlalchemy
+python-dotenv
+requests
