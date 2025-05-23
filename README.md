@@ -93,6 +93,7 @@ python-dotenv
 
 Run the scraper:
 ```bash
+cd src
 python main.py
 ```
 

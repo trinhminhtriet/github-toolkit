@@ -18,7 +18,7 @@ class GithubDeveloperScraper:
             try:
                 existing_user = (
                     session.query(GithubUserModel)
-                    .filter_by(username認認username)
+                    .filter_by(username=username)
                     .first()
                 )
                 if not existing_user:
