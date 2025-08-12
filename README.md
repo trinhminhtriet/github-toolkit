@@ -50,8 +50,8 @@ github-toolkit/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/github-scraper.git
-cd github-scraper
+git clone git@github.com:trinhminhtriet/github-toolkit.git
+cd github-toolkit
 ```
 
 2. Create a virtual environment and activate it:
