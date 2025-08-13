@@ -14,7 +14,7 @@ class GitstarController:
         try:
             scraper = GitstarUserScraper(self.db_connection)
             self.logger.info("Starting Gitstar user collection...")
-            collections = scraper.scrape_all_users(max_pages=1000)
+            collections = scraper.scrape_all_users(max_pages=100)
             self.logger.info(f"Collected {len(collections)} Gitstar users")
         finally:
             # self.auth_service.close()
