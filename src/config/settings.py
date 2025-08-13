@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 class Settings:
     GITHUB_USERNAME = os.getenv("GITHUB_USERNAME")
     GITHUB_PASSWORD = os.getenv("GITHUB_PASSWORD")

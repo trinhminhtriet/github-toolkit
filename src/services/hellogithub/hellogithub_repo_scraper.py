@@ -62,7 +62,7 @@ class HelloGithubRepoScraper:
         return {
             "username": repo_data.get("author", "unknown"),
             "repo_name": repo_data.get("name", ""),
-            "repo_url": f"https://github.com/{repo_data.get("author", "")}/{repo_data.get("name", "")}",
+            "repo_url": f"https://github.com/{repo_data.get('author', '')}/{repo_data.get('name', '')}",
             "repo_intro": repo_data.get("summary_en", ""),
             "repo_lang": repo_data.get("primary_lang", ""),
         }
