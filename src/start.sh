@@ -9,4 +9,4 @@ source .env
 python main.py hellogithub_collect_repo
 python main.py gitstar_collect_repo
 python main.py gitstar_collect_user
-python main.py github_collect_repo
+# python main.py github_collect_repo

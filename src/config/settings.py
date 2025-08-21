@@ -6,6 +6,7 @@ load_dotenv()
 class Settings:
     GITHUB_USERNAME = os.getenv("GITHUB_USERNAME")
     GITHUB_PASSWORD = os.getenv("GITHUB_PASSWORD")
+    PERSONAL_GITHUB_TOKEN = os.getenv("PERSONAL_GITHUB_TOKEN")
     DB_USERNAME = os.getenv("DB_USERNAME")
     DB_PASSWORD = os.getenv("DB_PASSWORD")
     DB_HOST = os.getenv("DB_HOST")
